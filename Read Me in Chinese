@@ -1,0 +1,75 @@
+通过‘Configuration’配置文件中‘function’选项使程序执行不同功能。‘No Setting required’部分不需要设置。以下简单介绍各功能模块：
+
+备注：
+batch size：对于（1998，1512）LDPC码，推荐1250，对于（155，62）LDPC码推荐30000，以此类推
+
+#######################################################################################################################
+‘GenAWGNDecodingData’：
+生成用于译码的数据，包含接收信号和传输基带信号，保存在\code\DecodingData\AWGN中。所有译码方法都将用此数据进行BER测量。
+参数：
+N_code，K_code：选择LDPC码本(本代码中提供（1998，1512）LDPC码)
+SNR_set_Gendata：需要生成的不同噪声下的数据（对于上述码本推荐1-3dB）
+total_samples： 生成比特数（默认5e8） 
+#######################################################################################################################
+‘AWGNSPdecode’：
+SP译码，最优的BP算法，
+参数：
+N_code，K_code：选择LDPC码本(本代码中提供（1998，1512）LDPC码)
+SNR_set_Decdata：译码的SNR区间
+BP_iter_nums:迭代次数
+#######################################################################################################################
+‘AWGNMSdecode’：
+MS译码,比SP算法性能低但硬件复杂度更低，
+参数：
+N_code，K_code：选择LDPC码本(本代码中提供（1998，1512）LDPC码)
+SNR_set_Decdata：译码的SNR区间
+BP_iter_nums:迭代次数
+alpha，beta：Normalized MS和Offset MS的scaling factor，通过设置alpha<1,beta<0可以提升MS算法性能，
+             当alpha=1，beta=0，即为MS算法。
+#######################################################################################################################
+'AWGNQNMSdecode'：
+量化的Normalized MS算法，本代码中仅考虑两比特量化。
+参数：
+N_code，K_code：选择LDPC码本(本代码中提供（1998，1512）LDPC码)
+SNR_set_Decdata：译码的SNR区间
+BP_iter_nums:迭代次数
+alpha：Normalized MS的scaling factor
+gamma：量化区间。
+#######################################################################################################################
+'AWGNAdaptivedecode'：
+自适应量化区间解码器。
+参数：
+N_code，K_code：选择LDPC码本(本代码中提供（1998，1512）LDPC码)
+SNR_set_Decdata：译码的SNR区间
+BP_iter_nums:迭代次数
+gamma_set：自适应选择算法中三个量化器的量化区间
+syndrome_weight_determining：用于判决选择那个译码器的校正子权重的阈值
+#######################################################################################################################
+
+
+
+以下为深度学习方法优化alpha和gamma：
+###############################################################################
+‘GenAWGNTrainingData’：
+生成用于网络训练和测试的数据，包含接收信号和传输基带信号。训练数据保存在\code\TrainingData\AWGN中。
+测试数据保存在\code\TestData\AWGN中。
+参数：
+N_code，K_code：选择LDPC码本(本代码中提供（1998，1512）LDPC码)
+SNR_set_Gendata：需要生成的不同噪声下的数据（对于上述码本推荐1-3dB）
+raining_sample_num
+training_minibatch_size 
+test_sample_num
+test_minibatch_size
+###############################################################################
+‘AWGNTrain’：
+训练参数，训练结果保存在\code\results中
+参数：
+N_code，K_code：选择LDPC码本(本代码中提供（1998，1512）LDPC码)
+training_iter：训练中译码器迭代次数，多少次迭代就会有多少组alpha和gamma。
+training_SNR：训练的SNR区间
+###############################################################################
+‘AWGNtest’：
+测试，测试结果保存在\code\results中
+N_code，K_code：选择LDPC码本(本代码中提供（1998，1512）LDPC码)
+test_iter：测试中译码器迭代次数，多少次迭代就会有多少组alpha和gamma。
+test_SNR：测试的SNR区间
