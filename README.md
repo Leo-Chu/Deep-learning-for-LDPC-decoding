@@ -1,4 +1,4 @@
-Here  we provide codes for two papers：
+Here  we (Huanyu He and Lei Chu)provide codes for two papers：
 
 1、H. He, Lei Chu, Robert Qiu; A New Low-Resolution Min-Sum Decoder Based on Dynamic Clipping for LDPC Codes, IN ICCC 2019;
 
@@ -7,3 +7,6 @@ to Globecom 2019;
 
 
 If you use these codes, please cite our papers.
+
+For any questions about the codes, please contact uestcahcl@gmail.com
+
